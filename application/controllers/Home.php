@@ -7,7 +7,8 @@ class Home extends CI_Controller
 	{
 		$this->checkLogin();
 		$data = array(
-			'page_title' => 'Codeigniter | Home'
+			'page_title' => 'Codeigniter | Home',
+			'userDealers' => $this->Home_model->getUserDetailByCond(array('userType' => 1))
 		);
 
 		$this->load->view('template/header', $data);
@@ -48,7 +49,11 @@ class Home extends CI_Controller
 				'userType' => $this->input->post('userType'),
 			);
 			$this->session->set_userdata('codeigniter', $sessionData);
-			redirect(base_url());
+			if ($this->input->post('userType') == 1) {
+				redirect(base_url('edit-dealer-info'));
+			} else {
+				redirect(base_url());
+			}
 		}
 	}
 
@@ -72,24 +77,13 @@ class Home extends CI_Controller
 			$userDetails = $this->Home_model->getUserDetailByCond(array('userEmailAddress' => $_POST['emailAddress']));
 			if ($userDetails) {
 				if ($userDetails[0]->userPassword == $_POST['password']) {
-					$isFirstLogin = $userDetails[0]->isFirstLogin;
 					$userType = $userDetails[0]->userType;
 					$sessionData = array(
 						'userId' => $userDetails[0]->id,
 						'userType' => $userType,
 					);
-					if ($userType == 1) {
-						if ($isFirstLogin == 1) {
-							$this->session->set_userdata('codeigniter', $sessionData);
-							redirect(base_url('edit-dealer-info'));
-						} else {
-							$this->session->set_userdata('codeigniter', $sessionData);
-							redirect(base_url(''));
-						}
-					} else {
-						$this->session->set_userdata('codeigniter', $sessionData);
-						redirect(base_url(''));
-					}
+					$this->session->set_userdata('codeigniter', $sessionData);
+					redirect(base_url(''));
 				} else {
 					$this->session->set_flashdata('result', 'passworrd not found !!!');
 					redirect(base_url('login'));
@@ -103,7 +97,6 @@ class Home extends CI_Controller
 
 	public function editDealerInfo()
 	{
-		die();
 		$data = array(
 			'page_title' => 'Codeigniter | Edit Dealer Info'
 		);
@@ -120,8 +113,43 @@ class Home extends CI_Controller
 		if ($this->form_validation->run() == FALSE) {
 			redirect(base_url('edit-dealer-info'));
 		} else {
-			$formData = array();
-			$this->Home_model->updateUserByCond(array(''), $formData);
+			$userId = $this->session->userdata('codeigniter')['userId'];
+			$formData = array(
+				'userCity' => $_POST['userCity'],
+				'userState' => $_POST['userState'],
+				'userZip' => $_POST['userZip'],
+			);
+			$this->Home_model->updateUserByCond(array('id' => $userId), $formData);
+			redirect(base_url(''));
+		}
+	}
+
+	public function editDealer($param)
+	{
+		$data = array(
+			'page_title' => 'Codeigniter | Edit Dealer Info',
+			'userDealer' => $this->Home_model->getUserDetailByCond(array('id' => $param))[0]
+		);
+
+		$this->load->view('pages/editDealer', $data);
+	}
+
+	public function updateDealer($param)
+	{
+		$this->form_validation->set_rules('userCity', 'city name', 'trim|required');
+		$this->form_validation->set_rules('userState', 'state name', 'trim|required');
+		$this->form_validation->set_rules('userZip', 'zip code', 'trim|required|numeric|max_length[6]|min_length[6]');
+
+		if ($this->form_validation->run() == FALSE) {
+			redirect(base_url('edit-dealer-info'));
+		} else {
+			$formData = array(
+				'userCity' => $_POST['userCity'],
+				'userState' => $_POST['userState'],
+				'userZip' => $_POST['userZip'],
+			);
+			$this->Home_model->updateUserByCond(array('id' => $param), $formData);
+			redirect(base_url(''));
 		}
 	}
 
@@ -138,5 +166,12 @@ class Home extends CI_Controller
 			$this->session->unset_userdata('codeigniter');
 		}
 		redirect(base_url('login'));
+	}
+
+	public function getDealerDetails()
+	{
+		$searchTerm = $_POST['searchTerm'];
+		$response =	$this->Home_model->getDealerLike($searchTerm);
+		return print_r(json_encode($response));
 	}
 }

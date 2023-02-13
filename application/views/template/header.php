@@ -8,7 +8,6 @@
     <title><?= $page_title ?></title>
     <link rel="stylesheet" href="<?= asset_url('css/bootstrap.min.css') ?>">
     <link rel="stylesheet" href="<?= asset_url('css/all.min.css') ?>">
-    <link rel="stylesheet" href="<?= asset_url('css/style.css') ?>">
     <script src="<?= asset_url('js/jquery.min.js') ?>"></script>
 </head>
 
@@ -22,10 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="<?= base_url() ?>">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url() ?>">Link</a>
+                    <a class="nav-link" href="<?= base_url('Home') ?>">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('logout') ?>">Log Out</a>
@@ -33,9 +29,3 @@
             </ul>
         </div>
     </nav>
-
-    <script src="<?= asset_url('js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= asset_url('js/bootstrap.min.js') ?>"></script>
-</body>
-
-</html>

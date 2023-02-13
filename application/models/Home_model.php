@@ -16,6 +16,13 @@ class Home_model extends CI_Model
         return $result;
     }
 
+    public function getDealerLike($like)
+    {
+        $query = "SELECT * FROM usertbl WHERE userZip LIKE '%$like%'";
+        $response = $this->db->query($query);
+        return $response->result();
+    }
+
     public function updateUserByCond($cond, $formData)
     {
         $this->db->where($cond);
