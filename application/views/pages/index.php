@@ -1,9 +1,14 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-4 mt-3">
-            <input type="number" class="form-control" name="searchDealer" placeholder="Enter Zip to Search Dealer">
+    <form action="<?= base_url('search-dealer') ?>" method="post">
+        <div class="row">
+            <div class="col-md-4 mt-3">
+                <input type="number" class="form-control" name="searchDealer" placeholder="Enter Zip to Search Dealer">
+            </div>
+            <div class="xol-md-4 mt-3">
+                <button class="btn btn-primary">Search</button>
+            </div>
         </div>
-    </div>
+    </form>
     <table class="table mt-2">
         <thead>
             <tr>
@@ -33,24 +38,3 @@
         </tbody>
     </table>
 </div>
-
-<input type="hidden" name="baseUrl" value="<?= base_url() ?>">
-<script>
-    $(document).ready(function() {
-        $(document).on('keypress', 'input[name="searchDealer"]', function() {
-            const searchTerm = $(this).val();
-            if (searchTerm != '') {
-                $.ajax({
-                    url: "<?= base_url('home/getDealerDetails') ?>",
-                    method: "POST",
-                    data: {
-                        searchTerm: searchTerm
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    }
-                });
-            }
-        });
-    });
-</script>

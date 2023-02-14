@@ -168,10 +168,20 @@ class Home extends CI_Controller
 		redirect(base_url('login'));
 	}
 
-	public function getDealerDetails()
+	public function searchDealer()
 	{
-		$searchTerm = $_POST['searchTerm'];
-		$response =	$this->Home_model->getDealerLike($searchTerm);
-		return print_r(json_encode($response));
+		if (isset($_POST['searchDealer'])) {
+			$like = $_POST['searchDealer'];
+			$data = array(
+				'page_title' => 'Codeigniter | Home',
+				'userDealers' => $this->Home_model->getDealerLike($like)
+			);
+
+			$this->load->view('template/header', $data);
+			$this->load->view('pages/index', $data);
+			$this->load->view('template/footer');
+		} else {
+			redirect(base_url());
+		}
 	}
 }

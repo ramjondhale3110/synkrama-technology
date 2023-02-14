@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -58,6 +58,7 @@ $route['login-user'] = 'home/loginUser';
 $route['edit-dealer-info'] = 'home/editDealerInfo';
 $route['update-dealer-info'] = 'home/updateDealerInfo';
 
+$route['search-dealer'] = 'home/searchDealer';
 $route['edit-dealer/(:any)'] = 'home/editDealer/$1';
 $route['update-dealer/(:any)'] = 'home/updateDealer/$1';
 $route['404_override'] = '';
